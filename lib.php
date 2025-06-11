@@ -297,3 +297,16 @@ function multiprogress_extend_navigation($multiprogressnode, $course, $module, $
  */
 function multiprogress_extend_settings_navigation($settingsnav, $multiprogressnode = null) {
 }
+
+
+
+
+function multiprogress_cm_info_view(cm_info $cm) {
+    global $PAGE, $OUTPUT, $COURSE;
+    
+    $data = [
+    ];
+
+    $content = $OUTPUT->render_from_template('mod_multiprogress/activitycard', $data);
+    $cm->set_content($content);
+}
