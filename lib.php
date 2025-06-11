@@ -22,6 +22,33 @@
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+$matrix_curricular = [
+    "FIC.1198" => [
+        "curso" => "Seminário de Integração",
+        "alias" => "....",
+        "subtitulo" => "....",
+        "jornada" => true,
+    ], 
+    "FIC.1197" => [
+        "curso" => "Ética e Cidadania",
+        "alias" => "....",
+        "subtitulo" => "....",
+        "jornada" => false,
+    ], 
+    "FIC.1196" => [
+        "curso" => "Matemática",
+        "alias" => "....",
+        "subtitulo" => "....",
+        "jornada" => false,
+    ], 
+    "FIC.1195" => [
+        "curso" => "Língua Portuguesa",
+        "alias" => "....",
+        "subtitulo" => "....",
+        "jornada" => false,
+    ], 
+];
+
 /**
  * Return if the plugin supports $feature.
  *
@@ -309,4 +336,72 @@ function multiprogress_cm_info_view(cm_info $cm) {
 
     $content = $OUTPUT->render_from_template('mod_multiprogress/activitycard', $data);
     $cm->set_content($content);
+}
+
+
+
+function get_courses_progress()
+{
+    global $DB, $CFG, $COURSE, $USER;
+    // Título do curso
+    // Subtítulo do curso
+    // URL da pedra do curso
+    // Progresso do curso
+    $courses = $DB->get_records_sql(
+        "
+            SELECT c.id                                       AS course_id
+            , c.idnumber                                      AS course_idnumber
+            , c.fullname                                      AS course_fullname
+            , c.shortname                                      AS course_shortname
+            , (SELECT cd.value
+                FROM mdl_customfield_data                cd
+                        INNER JOIN mdl_customfield_field cf ON
+                            (cd.fieldid = cf.id AND cf.shortname = 'multiprogress_course_alias')
+                WHERE cd.instanceid = c.id)                 AS course_alias
+            , (SELECT cd.value
+                FROM mdl_customfield_data                cd
+                        INNER JOIN mdl_customfield_field cf ON
+                            (cd.fieldid = cf.id AND cf.shortname = 'multiprogress_course_subtitle')
+                WHERE cd.instanceid = c.id)                 AS course_subtitle
+            , (SELECT cd.value
+                FROM mdl_customfield_data                cd
+                        INNER JOIN mdl_customfield_field cf ON
+                            (cd.fieldid = cf.id AND cf.shortname = 'multiprogress_course_image_url')
+                WHERE cd.instanceid = c.id)                 AS course_image_url
+            , COUNT(cm.id)                                    AS total_modules
+            , COUNT(mc.id)                                    AS completed_modules
+            , TRUNC((COUNT(mc.id) * 100.0 / COUNT(cm.id)), 0) AS completion_percentage
+        FROM mdl_course                                   c
+                INNER JOIN mdl_course_modules            cm ON (c.id = cm.course)
+                LEFT JOIN  mdl_course_modules_completion mc ON (cm.id = mc.coursemoduleid)
+        WHERE c.category = $COURSE->category
+        AND (mc.userid = $USER->id OR mc.userid IS NULL)
+        GROUP BY c.id, c.fullname, c.shortname, c.idnumber
+        ORDER BY c.idnumber DESC
+        "
+    );
+
+
+    foreach ($courses as $course) {
+        // Extrai o valor 'FIC.1197' do idnumber usando regex
+        $disciplina = null;
+        if (preg_match('/.*\.(FIC.\\d*)#.*/', $course->course_idnumber, $matches)) {
+            $disciplina = $matches[1];
+        }
+        // If the course alias is not set, use the course fullname.
+        if (empty($course->course_alias)) {
+            $course->course_alias = $course->course_fullname;
+        }
+        // If the course subtitle is not set, use an empty string.
+        if (empty($course->course_subtitle)) {
+            $course->course_subtitle = $course->course_shortname;
+        }
+        // If the course image URL is not set, use a default image.
+        if (empty($course->course_image_url)) {
+            $course->course_image_url = "$CFG->wwwroot/blocks/multiprogress/assets/img/pedra.$disciplina.png";
+        }
+        $course->iniciou = $course->completion_percentage > 0;
+        $course->terminou = $course->completion_percentage == 100;
+    }
+    return array_values($courses);
 }
