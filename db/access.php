@@ -29,11 +29,12 @@ $capabilities = [
 
     'mod/multiprogress:addinstance' => [
         'captype' => 'write',
-        'contextlevel' => CONTEXT_MODULE,
+        'contextlevel' => CONTEXT_COURSE,
         'archetypes' => [
-            'student' => CAP_PROHIBIT,
+            'manager' => CAP_ALLOW,
             'editingteacher' => CAP_ALLOW,
+            'teacher' => CAP_ALLOW,
+            'student' => CAP_PROHIBIT,
         ],
-        'clonepermissionsfrom' => 'moodle/course:manageactivities',
     ],
 ];

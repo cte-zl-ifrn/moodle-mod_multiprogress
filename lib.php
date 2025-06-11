@@ -29,16 +29,22 @@
  * @return true | null True if the feature is supported, null otherwise.
  */
 function multiprogress_supports($feature) {
-    switch ($feature) {
-        case FEATURE_GRADE_HAS_GRADE:
-            return true;
-        case FEATURE_MOD_INTRO:
-            return true;
-        case FEATURE_BACKUP_MOODLE2:
-            return true;
-        default:
-            return null;
-    }
+    return match ($feature) {
+        FEATURE_MOD_ARCHETYPE => MOD_ARCHETYPE_RESOURCE,
+        FEATURE_GROUPS => false,
+        FEATURE_GROUPINGS => false,
+        FEATURE_MOD_INTRO => false,
+        FEATURE_COMPLETION => false,
+        FEATURE_COMPLETION_TRACKS_VIEWS => false,
+        FEATURE_GRADE_HAS_GRADE => false,
+        FEATURE_GRADE_OUTCOMES => false,
+        FEATURE_BACKUP_MOODLE2 => true,
+        FEATURE_SHOW_DESCRIPTION => false,
+        FEATURE_MOD_PURPOSE => MOD_PURPOSE_CONTENT,
+        FEATURE_MODEDIT_DEFAULT_COMPLETION => false,
+        FEATURE_QUICKCREATE => true,
+        default => null,
+    };
 }
 
 /**

@@ -29,7 +29,6 @@ $string['messageprovider:expiry'] = 'Expiry message';
 $string['messageprovider:submission'] = 'Submission message';
 $string['missingidandcmid'] = 'Missing id and cmid';
 $string['modulename'] = 'Multi progress';
-$string['modulename'] = 'newmodule';
 $string['modulename_help'] = 'Use the newmodule module for...';
 $string['modulenameplural'] = 'Multi progress';
 $string['multiprogress:addinstance'] = 'Add instance';
