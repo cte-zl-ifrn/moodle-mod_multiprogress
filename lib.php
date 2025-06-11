@@ -22,6 +22,8 @@
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+require_once(__DIR__ . '/../medalhasproitec/lib.php');
+
 /**
  * Return if the plugin supports $feature.
  *
@@ -305,6 +307,7 @@ function multiprogress_cm_info_view(cm_info $cm) {
     global $PAGE, $OUTPUT, $COURSE;
     
     $data = [
+        "courses" => get_courses_progress_as_list(),
     ];
 
     $content = $OUTPUT->render_from_template('mod_multiprogress/activitycard', $data);
