@@ -105,9 +105,9 @@
         }
       }
     </style>
-    <a href="view.php?id={{course_id}}" data-course_idnumber="{{course_idnumber}}" data-total_modules="{{total_modules}}" data-total_modules="{{completed_modules}}">
+    <a href="view.php?id={{course_id}}" data-course_idnumber="{{course_idnumber}}" data-total_modules="{{total_modules}}" data-total_modules="{{completed_modules}}" >
         <div class="mod_multiprogress_stone {{isactive}}">
-            <img src="{{course_image_url}}" class="glow-{{course_id}}" alt="{{course_alias}}">
+            <img class="glow-{{course_id}}" src="{{course_image_url}}" alt="{{course_alias}}" />
             <div>
                 <span>
                     {{course_alias}}<br />
@@ -123,9 +123,11 @@
         </div>
     </a>
     {{/courses}}
+    {{^isjourney}}
     <div class="show_more">
         <a href="javascript:void(0);" class="mod_show_more_link">Mostrar mais</a>
     </div>
+    {{/isjourney}}
 </div>
 <script>
     document.addEventListener('DOMContentLoaded', function () {

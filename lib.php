@@ -30,7 +30,8 @@ require_once(__DIR__ . '/../medalhasproitec/lib.php');
  * @param string $feature Constant representing the feature.
  * @return true | null True if the feature is supported, null otherwise.
  */
-function multiprogress_supports($feature) {
+function multiprogress_supports($feature)
+{
     return match ($feature) {
         FEATURE_MOD_ARCHETYPE => MOD_ARCHETYPE_RESOURCE,
         FEATURE_GROUPS => false,
@@ -60,7 +61,8 @@ function multiprogress_supports($feature) {
  * @param mod_multiprogress_mod_form $mform The form.
  * @return int The id of the newly inserted record.
  */
-function multiprogress_add_instance($moduleinstance, $mform = null) {
+function multiprogress_add_instance($moduleinstance, $mform = null)
+{
     global $DB;
 
     $moduleinstance->timecreated = time();
@@ -80,7 +82,8 @@ function multiprogress_add_instance($moduleinstance, $mform = null) {
  * @param mod_multiprogress_mod_form $mform The form.
  * @return bool True if successful, false otherwise.
  */
-function multiprogress_update_instance($moduleinstance, $mform = null) {
+function multiprogress_update_instance($moduleinstance, $mform = null)
+{
     global $DB;
 
     $moduleinstance->timemodified = time();
@@ -95,7 +98,8 @@ function multiprogress_update_instance($moduleinstance, $mform = null) {
  * @param int $id Id of the module instance.
  * @return bool True if successful, false on failure.
  */
-function multiprogress_delete_instance($id) {
+function multiprogress_delete_instance($id)
+{
     global $DB;
 
     $exists = $DB->get_record('multiprogress', ['id' => $id]);
@@ -118,7 +122,8 @@ function multiprogress_delete_instance($id) {
  * @param int $scaleid ID of the scale.
  * @return bool True if the scale is used by the given mod_multiprogress instance.
  */
-function multiprogress_scale_used($moduleinstanceid, $scaleid) {
+function multiprogress_scale_used($moduleinstanceid, $scaleid)
+{
     global $DB;
 
     if ($scaleid && $DB->record_exists('multiprogress', ['id' => $moduleinstanceid, 'grade' => -$scaleid])) {
@@ -136,7 +141,8 @@ function multiprogress_scale_used($moduleinstanceid, $scaleid) {
  * @param int $scaleid ID of the scale.
  * @return bool True if the scale is used by any mod_multiprogress instance.
  */
-function multiprogress_scale_used_anywhere($scaleid) {
+function multiprogress_scale_used_anywhere($scaleid)
+{
     global $DB;
 
     if ($scaleid && $DB->record_exists('multiprogress', ['grade' => -$scaleid])) {
@@ -155,9 +161,10 @@ function multiprogress_scale_used_anywhere($scaleid) {
  * @param bool $reset Reset grades in the gradebook.
  * @return void.
  */
-function multiprogress_grade_item_update($moduleinstance, $reset=false) {
+function multiprogress_grade_item_update($moduleinstance, $reset = false)
+{
     global $CFG;
-    require_once($CFG->libdir.'/gradelib.php');
+    require_once($CFG->libdir . '/gradelib.php');
 
     $item = [];
     $item['itemname'] = clean_param($moduleinstance->name, PARAM_NOTAGS);
@@ -186,12 +193,21 @@ function multiprogress_grade_item_update($moduleinstance, $reset=false) {
  * @param stdClass $moduleinstance Instance object.
  * @return grade_item.
  */
-function multiprogress_grade_item_delete($moduleinstance) {
+function multiprogress_grade_item_delete($moduleinstance)
+{
     global $CFG;
-    require_once($CFG->libdir.'/gradelib.php');
+    require_once($CFG->libdir . '/gradelib.php');
 
-    return grade_update('/mod/multiprogress', $moduleinstance->course, 'mod', 'multiprogress',
-                        $moduleinstance->id, 0, null, ['deleted' => 1]);
+    return grade_update(
+        '/mod/multiprogress',
+        $moduleinstance->course,
+        'mod',
+        'multiprogress',
+        $moduleinstance->id,
+        0,
+        null,
+        ['deleted' => 1]
+    );
 }
 
 /**
@@ -202,9 +218,10 @@ function multiprogress_grade_item_delete($moduleinstance) {
  * @param stdClass $moduleinstance Instance object with extra cmidnumber and modname property.
  * @param int $userid Update grade of specific user only, 0 means all participants.
  */
-function multiprogress_update_grades($moduleinstance, $userid = 0) {
+function multiprogress_update_grades($moduleinstance, $userid = 0)
+{
     global $CFG, $DB;
-    require_once($CFG->libdir.'/gradelib.php');
+    require_once($CFG->libdir . '/gradelib.php');
 
     // Populate array of grade objects indexed by userid.
     $grades = [];
@@ -225,7 +242,8 @@ function multiprogress_update_grades($moduleinstance, $userid = 0) {
  * @param stdClass $context
  * @return string[].
  */
-function multiprogress_get_file_areas($course, $cm, $context) {
+function multiprogress_get_file_areas($course, $cm, $context)
+{
     return [];
 }
 
@@ -246,7 +264,8 @@ function multiprogress_get_file_areas($course, $cm, $context) {
  * @param string $filename
  * @return file_info Instance or null if not found.
  */
-function multiprogress_get_file_info($browser, $areas, $course, $cm, $context, $filearea, $itemid, $filepath, $filename) {
+function multiprogress_get_file_info($browser, $areas, $course, $cm, $context, $filearea, $itemid, $filepath, $filename)
+{
     return null;
 }
 
@@ -264,7 +283,8 @@ function multiprogress_get_file_info($browser, $areas, $course, $cm, $context, $
  * @param bool $forcedownload Whether or not force download.
  * @param array $options Additional options affecting the file serving.
  */
-function multiprogress_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, $options = []) {
+function multiprogress_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, $options = [])
+{
     global $DB, $CFG;
 
     if ($context->contextlevel != CONTEXT_MODULE) {
@@ -285,8 +305,7 @@ function multiprogress_pluginfile($course, $cm, $context, $filearea, $args, $for
  * @param stdClass $module
  * @param cm_info $cm
  */
-function multiprogress_extend_navigation($multiprogressnode, $course, $module, $cm) {
-}
+function multiprogress_extend_navigation($multiprogressnode, $course, $module, $cm) {}
 
 /**
  * Extends the settings navigation with the mod_multiprogress settings.
@@ -297,20 +316,27 @@ function multiprogress_extend_navigation($multiprogressnode, $course, $module, $
  * @param settings_navigation $settingsnav {@see settings_navigation}
  * @param navigation_node $multiprogressnode {@see navigation_node}
  */
-function multiprogress_extend_settings_navigation($settingsnav, $multiprogressnode = null) {
-}
+function multiprogress_extend_settings_navigation($settingsnav, $multiprogressnode = null) {}
 
 
 
 
-function multiprogress_cm_info_view(cm_info $cm) {
+function multiprogress_cm_info_view(cm_info $cm)
+{
     global $PAGE, $OUTPUT, $COURSE;
-    
-    $data = [
-        "courses" => get_courses_progress_as_list(),
-    ];
+
+    $disc = get_disciplina_from_idnumber($COURSE->idnumber);
+    $courses = get_courses_progress_as_list();
+    $isjourney = ($disc == CODIGO_DISCIPLINA_JORNADA);
+
+    if ($isjourney) {
+        foreach ($courses as $course) {
+            $course->isactive = '';
+        }
+    }
+
+    $data = ["courses" => $courses, 'isjourney' => $isjourney];
 
     $content = $OUTPUT->render_from_template('mod_multiprogress/activitycard', $data);
     $cm->set_content($content);
 }
-
