@@ -338,5 +338,5 @@ function multiprogress_cm_info_view(cm_info $cm)
     $data = ["courses" => $courses, 'isjourney' => $isjourney];
 
     $content = $OUTPUT->render_from_template('mod_multiprogress/activitycard', $data);
-    $cm->set_content($content);
+    $cm->set_content($content, true);
 }
