@@ -28,17 +28,19 @@ defined('MOODLE_INTERNAL') || die();
 // More information about the backup process: {@link https://docs.moodle.org/dev/Backup_API}.
 // More information about the restore process: {@link https://docs.moodle.org/dev/Restore_API}.
 
-require_once($CFG->dirroot.'//mod/multiprogress/backup/moodle2/restore_multiprogress_stepslib.php');
+require_once($CFG->dirroot . '/mod/multiprogress/backup/moodle2/restore_multiprogress_stepslib.php');
 
 /**
  * Restore task for mod_multiprogress.
  */
-class restore_multiprogress_activity_task extends restore_activity_task {
+class restore_multiprogress_activity_task extends restore_activity_task
+{
 
     /**
      * Defines particular settings that this activity can have.
      */
-    protected function define_my_settings() {
+    protected function define_my_settings()
+    {
         return;
     }
 
@@ -47,7 +49,8 @@ class restore_multiprogress_activity_task extends restore_activity_task {
      *
      * @return base_step.
      */
-    protected function define_my_steps() {
+    protected function define_my_steps()
+    {
         $this->add_step(new restore_multiprogress_activity_structure_step('multiprogress_structure', 'multiprogress.xml'));
     }
 
@@ -56,10 +59,16 @@ class restore_multiprogress_activity_task extends restore_activity_task {
      *
      * @return array.
      */
-    public static function define_decode_contents() {
+    public static function define_decode_contents()
+    {
         $contents = [];
 
         // Define the contents.
+        $contents[] = new restore_decode_content(
+            'multiprogress',              // Nome da tabela.
+            ['intro'],                      // Campos com conteúdo a ser decodificado.
+            'multiprogress'               // Tipo da atividade.
+        );
 
         return $contents;
     }
@@ -69,10 +78,23 @@ class restore_multiprogress_activity_task extends restore_activity_task {
      *
      * @return array.
      */
-    public static function define_decode_rules() {
+    public static function define_decode_rules()
+    {
         $rules = [];
 
         // Define the rules.
+        $rules[] = new restore_decode_rule(
+            'MULTIPROGRESSVIEWBYID',
+            '/mod/multiprogress/view.php?id=$1',
+            'course_module'
+        );
+
+        $rules[] = new restore_decode_rule(
+            'MULTIPROGRESSINDEX',
+            '/mod/multiprogress/index.php?id=$1',
+            'course'
+        );
+
 
         return $rules;
     }
@@ -84,7 +106,8 @@ class restore_multiprogress_activity_task extends restore_activity_task {
      *
      * @return array.
      */
-    public static function define_restore_log_rules() {
+    public static function define_restore_log_rules()
+    {
         $rules = [];
 
         // Define the rules.
