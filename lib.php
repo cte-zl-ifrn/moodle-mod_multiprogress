@@ -323,19 +323,14 @@ function multiprogress_extend_settings_navigation($settingsnav, $multiprogressno
 
 function multiprogress_cm_info_view(cm_info $cm)
 {
-    global $PAGE, $OUTPUT, $COURSE;
+    global $OUTPUT;
 
-    $disc = get_disciplina_from_idnumber($COURSE->idnumber);
-    $courses = get_courses_progress_as_list();
-    $isjourney = ($disc == CODIGO_DISCIPLINA_JORNADA);
-
-    if ($isjourney) {
-        foreach ($courses as $course) {
+    $data = get_courses_progress_as_dict();
+    if ($data["isjourney"]) {
+        foreach ($data["courses"] as $course) {
             $course->isactive = '';
         }
     }
-
-    $data = ["courses" => $courses, 'isjourney' => $isjourney];
 
     $content = $OUTPUT->render_from_template('mod_multiprogress/activitycard', $data);
     $cm->set_content($content, true);

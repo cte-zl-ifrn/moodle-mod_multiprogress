@@ -82,13 +82,16 @@
 
 </style>
 
+{{#jornada.iniciada}}
 <div class="mod_multiprogress_container">
+    <!--
     <div class="mod_multiprogress_header">
-        <div class="mod_multiprogress_title">Conquiste todas as pedras para abrir o códex.</div>
+        <div class="mod_multiprogress_title">Conquiste todas as pedras para abrir o Codex.</div>
         <div class="mod_multiprogress_book">
-            <img src="{{config.wwwroot}}/mod/multiprogress/pix/livro.png" alt="Códex" class="glow-book">
+            <img src="{{config.wwwroot}}/mod/multiprogress/pix/livro.png" alt="Codex" class="glow-book">
         </div>
     </div>
+    -->
     
     {{#courses}}
     <style>
@@ -105,7 +108,7 @@
         }
       }
     </style>
-    <a href="view.php?id={{course_id}}" data-course_idnumber="{{course_idnumber}}" data-total_modules="{{total_modules}}" data-total_modules="{{completed_modules}}" >
+    <a href_old="view.php?id={{course_id}}" data-course_idnumber="{{course_idnumber}}" data-total_modules="{{total_modules}}" data-total_modules="{{completed_modules}}" >
         <div class="mod_multiprogress_stone {{isactive}}">
             <img class="glow-{{course_id}}" src="{{course_image_url}}" alt="{{course_alias}}" />
             <div>
@@ -142,3 +145,4 @@
       });
     });
 </script>
+{{/jornada.iniciada}}
