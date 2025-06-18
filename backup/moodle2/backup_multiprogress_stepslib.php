@@ -29,33 +29,47 @@
 /**
  * Define the complete structure for backup, with file and id annotations.
  */
-class backup_multiprogress_activity_structure_step extends backup_activity_structure_step {
+class backup_multiprogress_activity_structure_step extends backup_activity_structure_step
+{
 
     /**
      * Defines the structure of the resulting xml file.
      *
      * @return backup_nested_element The structure wrapped by the common 'activity' element.
      */
-    protected function define_structure() {
+    protected function define_structure()
+    {
         $userinfo = $this->get_setting_value('userinfo');
 
         // Replace with the attributes and final elements that the element will handle.
         $attributes = null;
         $finalelements = null;
-        $root = new backup_nested_element('mod_multiprogress', $attributes, $finalelements);
+        $root = new backup_nested_element('multiprogress', $attributes, $finalelements);
+
+        // Build the tree with these elements with $root as the root of the backup tree.
+        $root = new backup_nested_element('multiprogress', ['id'], [
+            'course',
+            'name',
+            'intro',
+            'introformat',
+            'timecreated',
+            'timemodified'
+        ]);
+
+        // Define the source tables for the elements.
+        $root->set_source_table('multiprogress', array('id' => backup::VAR_ACTIVITYID));
+
+        // Define id annotations.
+
+        // Define file annotations.
+        $root->annotate_files('multiprogress', 'intro', null);
 
         // Replace with the attributes and final elements that the element will handle.
         $attributes = null;
         $finalelements = null;
         $elt = new backup_nested_element('elt', $attributes, $finalelements);
+        // $elt = new backup_nested_element('elt', $attributes, $finalelements);
 
-        // Build the tree with these elements with $root as the root of the backup tree.
-
-        // Define the source tables for the elements.
-
-        // Define id annotations.
-
-        // Define file annotations.
 
         return $this->prepare_activity_structure($root);
     }

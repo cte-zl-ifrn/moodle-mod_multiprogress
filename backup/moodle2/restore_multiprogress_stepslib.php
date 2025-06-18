@@ -29,35 +29,48 @@
 /**
  * Defines the structure step to restore one mod_multiprogress activity.
  */
-class restore_multiprogress_activity_structure_step extends restore_activity_structure_step {
+class restore_multiprogress_activity_structure_step extends restore_activity_structure_step
+{
 
-    /**
-     * Defines the structure to be restored.
-     *
-     * @return restore_path_element[].
-     */
-    protected function define_structure() {
-        $paths = [];
-        $userinfo = $this->get_setting_value('userinfo');
+	/**
+	 * Defines the structure to be restored.
+	 *
+	 * @return restore_path_element[].
+	 */
+	protected function define_structure()
+	{
+		$paths = [];
+		$userinfo = $this->get_setting_value('userinfo');
 
-        $paths[] = new restore_path_element('elt', '/path/to/file');
+		$paths[] = new restore_path_element('multiprogress', '/activity/multiprogress');
 
-        return $this->prepare_activity_structure($paths);
-    }
+		return $this->prepare_activity_structure($paths);
+	}
 
-    /**
-     * Processes the elt restore data.
-     *
-     * @param array $data Parsed element data.
-     */
-    protected function process_elt($data) {
-        return;
-    }
+	/**
+	 * Processes the elt restore data.
+	 *
+	 * @param array $data Parsed element data.
+	 */
+	protected function process_multiprogress($data)
+	{
+		global $DB;
 
-    /**
-     * Defines post-execution actions.
-     */
-    protected function after_execute() {
-        return;
-    }
+		$data = (object)$data;
+		$data->course = $this->get_courseid();
+
+		// Insere no banco de dados e armazena o novo ID.
+		$newitemid = $DB->insert_record('multiprogress', $data);
+
+		// Associa o novo ID à atividade restaurada.
+		$this->apply_activity_instance($newitemid);
+	}
+
+	/**
+	 * Defines post-execution actions.
+	 */
+	protected function after_execute()
+	{
+		$this->add_related_files('multiprogress', 'intro', null);
+	}
 }
