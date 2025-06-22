@@ -39,38 +39,23 @@ class backup_multiprogress_activity_structure_step extends backup_activity_struc
      */
     protected function define_structure()
     {
-        $userinfo = $this->get_setting_value('userinfo');
+        $multiprogress = new backup_nested_element(
+            'multiprogress',
+            ['id'],
+            [
+                'course',
+                'name',
+                'intro',
+                'introformat',
+                'timecreated',
+                'timemodified'
+            ]
+        );
 
-        // Replace with the attributes and final elements that the element will handle.
-        $attributes = null;
-        $finalelements = null;
-        $root = new backup_nested_element('multiprogress', $attributes, $finalelements);
+        $multiprogress->set_source_table('multiprogress', ['id' => backup::VAR_ACTIVITYID]);
 
-        // Build the tree with these elements with $root as the root of the backup tree.
-        $root = new backup_nested_element('multiprogress', ['id'], [
-            'course',
-            'name',
-            'intro',
-            'introformat',
-            'timecreated',
-            'timemodified'
-        ]);
+        $multiprogress->annotate_files('mod_multiprogress', 'intro', null);
 
-        // Define the source tables for the elements.
-        $root->set_source_table('multiprogress', array('id' => backup::VAR_ACTIVITYID));
-
-        // Define id annotations.
-
-        // Define file annotations.
-        $root->annotate_files('multiprogress', 'intro', null);
-
-        // Replace with the attributes and final elements that the element will handle.
-        $attributes = null;
-        $finalelements = null;
-        $elt = new backup_nested_element('elt', $attributes, $finalelements);
-        // $elt = new backup_nested_element('elt', $attributes, $finalelements);
-
-
-        return $this->prepare_activity_structure($root);
+        return $this->prepare_activity_structure($multiprogress);
     }
 }
