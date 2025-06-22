@@ -66,10 +66,10 @@ class mod_multiprogress_mod_form extends moodleform_mod {
             $this->add_intro_editor();
         }
 
-        // Adding the rest of mod_multiprogress settings, spreading all them into this fieldset
-        // ... or adding more fieldsets ('header' elements) if needed for better logic.
-        $mform->addElement('static', 'label1', 'multiprogresssettings', get_string('multiprogresssettings', 'mod_multiprogress'));
-        $mform->addElement('header', 'multiprogressfieldset', get_string('multiprogressfieldset', 'mod_multiprogress'));
+        // // Adding the rest of mod_multiprogress settings, spreading all them into this fieldset
+        // // ... or adding more fieldsets ('header' elements) if needed for better logic.
+        // $mform->addElement('static', 'label1', 'multiprogresssettings', get_string('multiprogresssettings', 'mod_multiprogress'));
+        // $mform->addElement('header', 'multiprogressfieldset', get_string('multiprogressfieldset', 'mod_multiprogress'));
 
         // Add standard grading elements.
         $this->standard_grading_coursemodule_elements();
