@@ -39,10 +39,7 @@ class restore_multiprogress_activity_task extends restore_activity_task
     /**
      * Defines particular settings that this activity can have.
      */
-    protected function define_my_settings()
-    {
-        return;
-    }
+    protected function define_my_settings() {}
 
     /**
      * Defines particular steps that this activity can have.
@@ -61,16 +58,9 @@ class restore_multiprogress_activity_task extends restore_activity_task
      */
     public static function define_decode_contents()
     {
-        $contents = [];
-
-        // Define the contents.
-        $contents[] = new restore_decode_content(
-            'multiprogress',              // Nome da tabela.
-            ['intro'],                      // Campos com conteúdo a ser decodificado.
-            'multiprogress'               // Tipo da atividade.
-        );
-
-        return $contents;
+        return [
+            new restore_decode_content('multiprogress', ['intro'], 'multiprogress')
+        ];
     }
 
     /**
@@ -80,38 +70,40 @@ class restore_multiprogress_activity_task extends restore_activity_task
      */
     public static function define_decode_rules()
     {
-        $rules = [];
-
-        // Define the rules.
-        $rules[] = new restore_decode_rule(
-            'MULTIPROGRESSVIEWBYID',
-            '/mod/multiprogress/view.php?id=$1',
-            'course_module'
-        );
-
-        $rules[] = new restore_decode_rule(
-            'MULTIPROGRESSINDEX',
-            '/mod/multiprogress/index.php?id=$1',
-            'course'
-        );
-
-
-        return $rules;
+        return [];
     }
+
 
     /**
      * Defines the restore log rules that will be applied by the
-     * {@see restore_logs_processor} when restoring mod_multiprogress logs. It
+     * {@see restore_logs_processor} when restoring mod_medalhasproitec logs. It
      * must return one array of {@see restore_log_rule} objects.
      *
      * @return array.
      */
     public static function define_restore_log_rules()
     {
-        $rules = [];
+        return [
+            new restore_log_rule('multiprogress', 'add', 'view.php?id={course_module}', '{multiprogress}'),
+            new restore_log_rule('multiprogress', 'update', 'view.php?id={course_module}', '{multiprogress}'),
+            new restore_log_rule('multiprogress', 'view', 'view.php?id={course_module}', '{multiprogress}'),
+        ];
+    }
 
-        // Define the rules.
-
-        return $rules;
+    /**
+     * Define the restore log rules that will be applied
+     * by the {@link restore_logs_processor} when restoring
+     * course logs. It must return one array
+     * of {@link restore_log_rule} objects
+     *
+     * Note this rules are applied when restoring course logs
+     * by the restore final task, but are defined here at
+     * activity level. All them are rules not linked to any module instance (cmid = 0)
+     */
+    public static function define_restore_log_rules_for_course()
+    {
+        return [
+            new restore_log_rule('multiprogress', 'view all', 'index.php?id={course}', null)
+        ];
     }
 }
