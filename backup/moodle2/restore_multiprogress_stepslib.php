@@ -39,12 +39,11 @@ class restore_multiprogress_activity_structure_step extends restore_activity_str
 	 */
 	protected function define_structure()
 	{
-		$paths = [];
-		$userinfo = $this->get_setting_value('userinfo');
-
-		$paths[] = new restore_path_element('multiprogress', '/activity/multiprogress');
-
-		return $this->prepare_activity_structure($paths);
+		return $this->prepare_activity_structure(
+			[
+				new restore_path_element('multiprogress', '/activity/multiprogress')
+			]
+		);
 	}
 
 	/**
@@ -71,6 +70,6 @@ class restore_multiprogress_activity_structure_step extends restore_activity_str
 	 */
 	protected function after_execute()
 	{
-		$this->add_related_files('multiprogress', 'intro', null);
+		$this->add_related_files('mod_multiprogress', 'intro', null);
 	}
 }
