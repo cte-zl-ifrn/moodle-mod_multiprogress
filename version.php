@@ -25,10 +25,10 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'mod_multiprogress';
-$plugin->release = '0.1.20';
-$plugin->version = 2025062120;
+$plugin->release = '0.1.21';
+$plugin->version = 2025070321;
 $plugin->requires = 2022112800;
-$plugin->maturity = MATURITY_RC;
+$plugin->maturity = MATURITY_STABLE;
 $plugin->dependencies = [
     'local_suap' => 20250605066,
 ];
